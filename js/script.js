@@ -3,8 +3,12 @@
  */
 var score = 0;
 var nrQuestion = 0;
+<<<<<<< HEAD
 var fjoldispurninga = 10;
 var samtals = 0;
+=======
+var utkoma = "";
+>>>>>>> a382da20c408ed133a421a9c01fcdc782a69a551
 
 function Questions(q1, q2, answ, ransw, svar, rettsvar){
     this.q1 = q1;
@@ -101,14 +105,14 @@ function loadQuestion(){
     /**
      * For lykkja sem byrtir alla valmöguleikana þarna nær hann í rétta svarið sem ég bjó til í Question();
      */
-    for (var i = spurning.answ.length - 1; i >= 0; i--) {
+    for (var i = 0; i < spurning.answ.length; i++) {
         rett = spurning.rettsvar == i; // Rétta svarið úr Question();
-        output += ('<button class="takki btn btn-info">' + spurning.answ[i] + '</button>'); // Býr til takkana
+        output += ('<button class="takki btn btn-info" id="' + (i + 1) +'">' + spurning.answ[i] + '</button>'); // Býr til takkana
     }
     output += '</div>'; // Css
     output += ('<br><br><button class="sleppa btn btn-warning">Sleppa spurningu</button>'); // Takki til að sleppa spurningu færð merkt sem rangt ef þú ítir á hann
 
-    var utkoma = (texti + output); // Setur allt saman svo að það sé auðveldara að prenta út
+    utkoma = (texti + output); // Setur allt saman svo að það sé auðveldara að prenta út
     main.innerHTML = utkoma; // ^^
 
     /**
@@ -177,13 +181,12 @@ function checkAnswer(usersvar, rett){
     }
 
     nrQuestion++; // Telja hvað notandi er búinn að svara mörgum spurningum
-    setTimeout(loadQuestion,1000); // setTimeout til að það sé hægt að sjá hvað notandi valdi
+    setTimeout(loadQuestion,500); // setTimeout til að það sé hægt að sjá hvað notandi valdi
 }
 
 function Progress_bar(){
     var bar = Get_id("bar");
     var prosenta = 100 / fjoldispurninga;
-    //container.innerHTML = '<div class="container progress"><span>' + samtals + ' %</span> <div class="determinate" style="width: ' + samtals + '%"></div></div> ';
     bar.innerHTML = '<div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: ' + samtals + '%"> ' + samtals + '%</div> </div>';
     samtals += prosenta;
 }
