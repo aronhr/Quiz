@@ -6,6 +6,7 @@ var nrQuestion = 0;
 var fjoldispurninga = 10;
 var samtals = 0;
 
+
 function Questions(q1, q2, answ, ransw, svar, rettsvar){
     this.q1 = q1;
     this.q2 = q2;
@@ -69,8 +70,8 @@ function loadQuestion(){
     var main = Get_id("main"); // Staðsetning á div id="main"
     var output = "";
     var rett =  "";
-    var texti = '<small>Spurning númer: ' + nrQuestion + ' af ' + fjoldispurninga + '!</small>'; // Seigir notanda hvaða spurningu hann er á
-    texti += '<h1><b>' + spurning.q1 +' * '+ spurning.q2 +' = ???</b></h1>'; // Aðal spurningin
+
+    var texti = '<h1><b>' + spurning.q1 +' * '+ spurning.q2 +' = ???</b></h1>'; // Aðal spurningin
 
     /**
      * Þegar notandi er buinn að svara 10 sp í röð þá fer þessi if í gang
@@ -80,14 +81,15 @@ function loadQuestion(){
      */
     if(nrQuestion >= fjoldispurninga){
         main.innerHTML = " ";
-        samtals = 0;
         var bar = Get_id("bar");
         bar.innerHTML = " ";
+        samtals = 0;
         texti = "<h2>Þú varst með  " + score + " af " + fjoldispurninga + " spurningum rétt! </h2>";
-        if (!this.name.length >= 1) {
-            this.name = prompt('What is your name');
+        if (!localStorage.getItem('Name') >= 1) {
+            this.name = prompt('Hvað er nafnið þitt? ');
+            localStorage.setItem('Name', this.name);
         }
-        texti += '<h1>' + this.name + '</h1>';
+        texti += '<h1>' + localStorage.getItem('Name') + '</h1>';
         texti += "<h4>Samtals stig yfir allt: " + localStorage.score + "</h4>";
         texti += "<button class='spilaaftur btn btn-primary'>Spila aftur?</button>";
         main.innerHTML = texti;
@@ -115,6 +117,13 @@ function loadQuestion(){
      * Function sem keyrir þegar það er ítt á einn af svarmöguleikunum
      * Þetta function nær í valuið úr takkanum sem var ítt á og sendir notanda svar (Takkan sem notandi ítti á) og rétta svarið
      */
+    $(".swipe").on("swipeleft",function(){
+        console.log('swipe');
+        rett = spurning.rettsvar;
+        var usersvar = ($(this).text());
+        checkAnswer(usersvar, rett);
+    });
+
     $('.takki').click(function(){
         rett = spurning.rettsvar; // Rétta svarið úr Question();
         var usersvar = ($(this).text()); // Nær í value frá svartakka
@@ -142,7 +151,6 @@ function loadQuestion(){
 function SpilaAftur(){
     score = 0;
     nrQuestion = 0;
-    Progress_bar();
     loadQuestion();
 }
 
@@ -183,7 +191,10 @@ function checkAnswer(usersvar, rett){
 function Progress_bar(){
     var bar = Get_id("bar");
     var prosenta = 100 / fjoldispurninga;
-    bar.innerHTML = '<div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: ' + samtals + '%"> ' + samtals + '%</div> </div>';
+    bar.innerHTML = '<div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: ' + samtals + '%"></div></div>';
     samtals += prosenta;
+
 }
+
+
 window.addEventListener("load", loadQuestion, false); // Hleður inn appinu
