@@ -3,12 +3,8 @@
  */
 var score = 0;
 var nrQuestion = 0;
-<<<<<<< HEAD
 var fjoldispurninga = 10;
 var samtals = 0;
-=======
-var utkoma = "";
->>>>>>> a382da20c408ed133a421a9c01fcdc782a69a551
 
 function Questions(q1, q2, answ, ransw, svar, rettsvar){
     this.q1 = q1;
