@@ -3,6 +3,8 @@
  */
 var score = 0;
 var nrQuestion = 0;
+var fjoldispurninga = 10;
+var samtals = 0;
 
 function Questions(q1, q2, answ, ransw, svar, rettsvar){
     this.q1 = q1;
@@ -62,11 +64,12 @@ function Question(){
 }
 
 function loadQuestion(){
+    Progress_bar();
     var spurning = new Question(); // Byr til nýtt Question();
     var main = Get_id("main"); // Staðsetning á div id="main"
     var output = "";
     var rett =  "";
-    var texti = '<small>Spurning númer: ' + nrQuestion + ' af 10!</small>'; // Seigir notanda hvaða spurningu hann er á
+    var texti = '<small>Spurning númer: ' + nrQuestion + ' af ' + fjoldispurninga + '!</small>'; // Seigir notanda hvaða spurningu hann er á
     texti += '<h1><b>' + spurning.q1 +' * '+ spurning.q2 +' = ???</b></h1>'; // Aðal spurningin
 
     /**
@@ -75,9 +78,12 @@ function loadQuestion(){
      * Hún spyr um nafn notanda og skráir niður í localstorage hvað scorið hja notandanum er yfir allt
      * Hún býr til takka sem notandi getur ítt á til að byrja aftur
      */
-    if(nrQuestion >= 10){
+    if(nrQuestion >= fjoldispurninga){
         main.innerHTML = " ";
-        texti = "<h2>Þú varst með  " + score + " af 10 spurningum rétt! </h2>";
+        samtals = 0;
+        var bar = Get_id("bar");
+        bar.innerHTML = " ";
+        texti = "<h2>Þú varst með  " + score + " af " + fjoldispurninga + " spurningum rétt! </h2>";
         if (!this.name.length >= 1) {
             this.name = prompt('What is your name');
         }
@@ -136,6 +142,7 @@ function loadQuestion(){
 function SpilaAftur(){
     score = 0;
     nrQuestion = 0;
+    Progress_bar();
     loadQuestion();
 }
 
@@ -168,7 +175,16 @@ function checkAnswer(usersvar, rett){
         $(".takki").removeClass("btn-info").addClass("btn-danger"); // Hérna er eytt klasa og bætt við öðrum
         console.log('%cRangt', 'background: #fff; color: red'); // Hérna er skrifað í consoleinn að svarið sé rangt
     }
+
     nrQuestion++; // Telja hvað notandi er búinn að svara mörgum spurningum
     setTimeout(loadQuestion,1000); // setTimeout til að það sé hægt að sjá hvað notandi valdi
+}
+
+function Progress_bar(){
+    var bar = Get_id("bar");
+    var prosenta = 100 / fjoldispurninga;
+    //container.innerHTML = '<div class="container progress"><span>' + samtals + ' %</span> <div class="determinate" style="width: ' + samtals + '%"></div></div> ';
+    bar.innerHTML = '<div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: ' + samtals + '%"> ' + samtals + '%</div> </div>';
+    samtals += prosenta;
 }
 window.addEventListener("load", loadQuestion, false); // Hleður inn appinu
